@@ -1,4 +1,4 @@
-RewriteBase /cuti_app
+RewriteBase /anggis
 
 Options +FollowSymLinks
 Options -Indexes

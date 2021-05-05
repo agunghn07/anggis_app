@@ -13,7 +13,7 @@ class MY_Controller extends CI_Controller {
 		$this->load->model('ListPengajuanCutiModel', 'listPengajuan', TRUE);
 		$this->load->helper('url');
 		$this->load->library('mailer');
-		$this->checkAuth();
+		$this->checkAuth(false);
 	}
 
 	public $parseData = [
@@ -37,12 +37,14 @@ class MY_Controller extends CI_Controller {
 		return str_replace(" ", "-", str_replace("/", "-", str_replace("\\", "-", str_replace("'", "-", str_replace(",", "-", str_replace(".", "-", str_replace('!', '', $value)))))));
 	}
 
-	public function checkAuth(){
-		if(!$this->session->userdata('backToken')){
-			redirect('Auth/login');
-		}else{
-			if(!$this->login->checkToken($this->session->userdata('backToken'))){
-				redirect('MainPage/logout');
+	public function checkAuth($NotByPass){
+		if($NotByPass){
+			if(!$this->session->userdata('backToken')){
+				redirect('Auth/login');
+			}else{
+				if(!$this->login->checkToken($this->session->userdata('backToken'))){
+					redirect('MainPage/logout');
+				}
 			}
 		}
 	}

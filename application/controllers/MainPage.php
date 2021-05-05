@@ -17,15 +17,15 @@ class MainPage extends MY_Controller {
 
 	public function index()
 	{
-        $sessionData = $this->master->getUserDetail($this->session->userdata('Noreg'));
-        $gender = $this->master->getGender();
-        $position = $this->master->getPosition();
-        $division = $this->master->getDivision();
+        // $sessionData = $this->master->getUserDetail($this->session->userdata('Noreg'));
+        // $gender = $this->master->getGender();
+        // $position = $this->master->getPosition();
+        // $division = $this->master->getDivision();
 
-        $this->parseData['Division'] = $division;
-        $this->parseData['Position'] = $position;
-        $this->parseData['Gender'] = $gender;
-        $this->parseData['userDetail'] = $sessionData;
+        // $this->parseData['Division'] = $division;
+        // $this->parseData['Position'] = $position;
+        // $this->parseData['Gender'] = $gender;
+        // $this->parseData['userDetail'] = $sessionData;
         $this->parseData['title']   = 'Master Page';
         $this->parseData['menu']   = 'Dashboard';
         $this->parseData['submenu']   = 'Master';

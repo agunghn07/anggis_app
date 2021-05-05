@@ -1,0 +1,277 @@
+/*================================================================================
+	Item Name: Stack - Responsive Admin Theme
+	Version: 1.0
+	Author: PIXINVENT
+	Author URL: http://www.themeforest.net/user/pixinvent
+================================================================================
+
+NOTE:
+------
+PLACE HERE YOUR OWN SCSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER STYLESHEETS.
+WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.  */
+
+html {
+	overflow: scroll;
+	overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+	width: 0px;
+	/* remove scrollbar space */
+	height: 8px;
+	background: transparent;
+	/* optional: just make scrollbar invisible */
+}
+
+::-webkit-scrollbar-track {
+	box-shadow: inset 0 0 5px transparent;
+	border-radius: 10px;
+}
+
+/* optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+	background: #E6E6FA;
+	border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: #D3D3D3;
+}
+
+html, .dataTables_scrollBody, .full-height-scroll
+{
+    scrollbar-width: none; 
+}
+
+
+/* DATATABLE CUSTOM CSS */
+/*========================================*/
+.dataTables_wrapper .row:first-child {
+	background-color: white !important;
+	margin-bottom: 5px !important;
+	margin-top: 1px !important;
+}
+
+.dataTables_wrapper .row:nth-child(3) {
+	background-color: white !important;
+	margin-top: 5px !important;
+}
+
+.dataTables_wrapper .row:nth-child(3) .col-sm-5 .dataTables_info {
+	display: inline-block;
+	border-radius: 10px;
+	border: 1px solid #A9A9A9;
+	width: auto;
+	padding: 6px 12px;
+	font-size: 12px;
+	color: #808080;
+}
+
+.dataTables_wrapper .row:first-child .col-sm-6 {
+	color: #808080;
+}
+
+.dataTables_wrapper .row:first-child .col-sm-6 .dataTables_length select {
+	border-radius: 10px;
+	border: 1px solid #A9A9A9;
+}
+
+.dataTables_wrapper .row:first-child .col-sm-6:nth-child(2) .dataTables_filter input {
+	color: #808080;
+	border-radius: 10px !important;
+	border: 1px solid #A9A9A9;
+}
+
+.dataTables_wrapper .row:nth-child(3) .col-sm-7 li:first-child a {
+	border-radius: 10px 0px 0px 10px !important;
+	border: 1px solid #C0C0C0;
+}
+
+.dataTables_wrapper .row:nth-child(3) .col-sm-7 li:last-child a {
+	border-radius: 0px 10px 10px 0px !important;
+	border: 1px solid #C0C0C0;
+}
+
+.dataTables_wrapper .row:nth-child(3) .col-sm-7 li a {
+	border: 1px solid #C0C0C0;
+}
+
+.dataTables_wrapper .dataTables_processing {
+	position: relative;
+	text-align: center;
+	font-size: 1.2em;
+	color: #A9A9A9;
+	border-radius: 10px !important;
+	border: 1px solid #A9A9A9;
+	height: 15px !important;
+	line-height: 1px;
+}
+
+.dataTables_wrapper tr th,
+.dataTables_wrapper tr td,
+#tblPreview tr th {
+	width: auto;
+	white-space: nowrap;
+}
+
+.dataTables_scroll {
+	font-size: 12px;
+	border: 1px solid #d4d4d4;
+	border-radius: 10px;
+}
+
+.customTable {
+	border-collapse: collapse;
+}
+
+.customTable td,
+.customTable th {
+	border-bottom: 1px solid #ddd;
+	padding: 5px 8px;
+}
+
+#colspanColumn {
+	border-bottom: 1px solid #ddd !important;
+}
+
+.customTable th {
+	text-align: center;
+	vertical-align: middle;
+}
+
+.customTable tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+
+#table_wrapper {
+	padding-bottom: 10px;
+}
+
+/* DATATABLE CUSTOM CSS */
+/*========================================*/
+
+
+/*Desired page in pagination with DataTables CUSTOM CSS*/
+/*========================================*/
+.dataTables_wrapper .row:nth-child(3) .col-sm-7 .dataTables_paginate .first.paginate_button {
+	display: inline-block;
+	width: auto;
+	border-radius: 10px 0px 0px 10px !important;
+	border: 1px solid #C0C0C0;
+	padding: 6px 12px;
+}
+
+.dataTables_wrapper .row:nth-child(3) .col-sm-7 .dataTables_paginate .previous.paginate_button,
+.next.paginate_button {
+	display: inline-block;
+	width: auto;
+	border: 1px solid #C0C0C0;
+	padding: 6px 12px;
+}
+
+.dataTables_wrapper .row:nth-child(3) .col-sm-7 .dataTables_paginate .last.paginate_button {
+	display: inline-block;
+	width: auto;
+	border-radius: 0px 10px 10px 0px !important;
+	border: 1px solid #C0C0C0;
+	padding: 6px 12px;
+}
+
+.dataTables_wrapper .row:nth-child(3) .col-sm-7 .dataTables_paginate .previous.paginate_button+span,
+.paginate_total {
+	padding: 6px 4px;
+}
+
+.dataTables_wrapper .row:nth-child(3) .col-sm-7 .dataTables_paginate input.paginate_input {
+	display: inline-block;
+	width: 50px;
+	padding: 6px 4px;
+	border-radius: 5px !important;
+	border: 1px solid #C0C0C0;
+}
+
+.dataTables_wrapper .row:nth-child(3) .col-sm-7 .dataTables_paginate .paginate_button {
+	cursor: pointer;
+	color: #777;
+}
+
+.dataTables_wrapper .row:nth-child(3) .col-sm-7 .dataTables_paginate .paginate_button:hover {
+	background-color: #00B5B8;
+	color: #ffffff;
+}
+
+.dataTables_wrapper .row:nth-child(3) .col-sm-7 .dataTables_paginate .paginate_button.disabled {
+	cursor: not-allowed;
+	color: #A9A9A9;
+}
+
+.dataTables_wrapper .row:nth-child(3) .col-sm-7 .dataTables_paginate .paginate_button.disabled:hover {
+	background-color: transparent;
+}
+
+/*END Desired page in pagination with DataTables CUSTOM CSS*/
+/*========================================*/
+
+
+/*Dropzone CUSTOM CSS*/
+/*========================================*/
+.dropzone {
+	border: 1px solid #00B5B8;
+	border-style: dotted;
+}
+
+/*Dropzone CUSTOM CSS*/
+/*========================================*/
+
+
+/* Shadow */
+.shadowBox {
+	box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.label-status:hover{
+	cursor: pointer;
+}
+
+.picText:hover{
+	cursor: pointer;
+	background-color: #d0d0d0;
+	border-radius: 5px;
+	border: 1px solid #d0d0d0;
+	padding: 1px;
+}
+
+/* Custom spinner */
+@keyframes spinner {
+	to {transform: rotate(360deg);}
+}
+  
+.spinnerDisplay:before {
+	content: '';
+	box-sizing: border-box;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 70px;
+	height: 70px;
+	margin-top: -10px;
+	margin-left: -30px;
+	border-radius: 50%;
+	border: 3px solid #abe3d7;
+	border-top-color: #1ab394;
+	animation: spinner .6s linear infinite;
+}
+
+.addOpacity{
+	opacity: 0.3;
+}
+/* Custom spinner */
+
+
+#formPengajuan .form-control{
+	background-color: #ffffff;
+}
+
+table td{
+	vertical-align: baseline;
+}

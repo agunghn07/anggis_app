@@ -2,6 +2,14 @@
 <html>
 <head>
     <?php $this->load->view('layout/header'); ?>
+    <style>
+        #page-wrapper{
+            background-image: url("<?php echo base_url(); ?>assets/img/web_base_L2.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
 </head>
 <body class="top-navigation pace-done">
     <script type="text/javascript">

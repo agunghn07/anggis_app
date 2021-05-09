@@ -3676,7 +3676,7 @@ ol.unstyled {
   bottom: 0;
   left: 0;
   padding: 10px 20px;
-  position: fixed;
+  position: absolute;
   right: 0;
 }
 .footer.fixed_full {
@@ -3696,9 +3696,11 @@ ol.unstyled {
   right: 0;
   z-index: 1000;
   padding: 10px 20px;
-  background: white;
-  border-top: 1px solid #e7eaec;
+  /* background: white; */
+  border-top: 1px solid transparent;
   margin-left: 220px;
+  background-color: transparent;
+  color: #ffffff;
 }
 body.mini-navbar .footer.fixed,
 body.body-small.mini-navbar .footer.fixed {

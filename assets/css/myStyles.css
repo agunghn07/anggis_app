@@ -326,3 +326,8 @@ table td{
 	margin-left: 5px;
 	margin-right: 5px;;
 }
+
+#modalMasterList .modal-body{
+    max-height: calc(100vh - 180px) !important;
+    overflow-y: auto !important;
+}

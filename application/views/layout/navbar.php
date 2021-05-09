@@ -1,46 +1,30 @@
-    <div class="row border-bottom">
-        <nav class="navbar navbar-static-top grey-bg" role="navigation" style="margin-bottom: 0">
-            <div class="navbar-header">
-                <a class="navbar-minimalize minimalize-styl-2 btn btn-primary" href="#"><i class="fa fa-bars"></i> </a>
-                <form role="search" class="navbar-form-custom" action="search_results.html">
-                    <div class="form-group">
-                        <input type="text" placeholder="Search for something..." class="form-control" name="top-search"
-                            id="top-search">
-                    </div>
-                </form>
-            </div>
+<div class="row border-bottom white-bg">
+    <nav class="navbar navbar-static-top" role="navigation">
+        <div class="navbar-header">
+            <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse"
+                class="navbar-toggle collapsed" type="button">
+                <i class="fa fa-reorder"></i>
+            </button>
+            <a href="#" class="navbar-brand" style="background-color: #17b39e !important;">Anggis</a>
+        </div>
+        <div class="navbar-collapse collapse" id="navbar">
+            <ul class="nav navbar-nav">
+                <li class="active">
+                    <a aria-expanded="false" role="button" href="layouts.html" style="color: #17b39e !important;"> Back to main Layout page</a>
+                </li>
+
+
+            </ul>
             <ul class="nav navbar-top-links navbar-right">
                 <li>
-                    <span class="m-r-sm text-muted welcome-message">Welcome to Cuti App</span>
-                </li>
-                <li class="dropdown">
-                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#" aria-expanded="false">
-                        <i class="fa fa-envelope"></i> <span class="label label-info" id="countMessage"></span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-messages" id="message"></ul>
+                    <span class="m-r-sm text-muted welcome-message">Welcome Anggis Doc App</span>
                 </li>
                 <li>
-                    <a href="<?php echo site_url('MainPage/logout') ?>">
+                    <a href="login.html">
                         <i class="fa fa-sign-out"></i> Log out
                     </a>
                 </li>
             </ul>
-        </nav>
-    </div>
-
-    <div class="row wrapper border-bottom white-bg page-heading">
-        <div class="col-lg-10">
-            <h2><?php echo $title; ?></h2>
-            <ol class="breadcrumb">
-                <li>
-                    <a href="<?php echo base_url('MainPage') ?>"><?php echo $menu; ?></a>
-                </li>
-                <li class="active">
-                    <strong><?php echo $submenu; ?></strong>
-                </li>
-            </ol>
         </div>
-        <div class="col-lg-2">
-
-        </div>
-    </div>
+    </nav>
+</div>

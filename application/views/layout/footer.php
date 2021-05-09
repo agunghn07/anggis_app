@@ -1,5 +1,5 @@
 		<div class="footer">
             <div>
-                <strong>Copyright</strong> My Project &copy; 2020
+                <strong>Copyright</strong> Anggis Doc App &copy; 2021
             </div>
         </div>

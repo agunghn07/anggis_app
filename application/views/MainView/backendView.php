@@ -3,8 +3,7 @@
 <head>
     <?php $this->load->view('layout/header'); ?>
 </head>
-<body class="<?php echo ($this->uri->segment(1) == 'NotifikasiSurel' ? 'no-skin-config full-height-layout pace-done' : '') ?>">
-    <!--Menampilkan Notifikasi Sweet Alert ketika proses telah dijalankan-->
+<body class="top-navigation pace-done">
     <script type="text/javascript">
         $(function(){
             var title = '<?= $this->session->flashdata('title') ?>';
@@ -23,11 +22,8 @@
     <!--Sweet alert-->
 
     <div id="wrapper">
-        <!--Sidebar -->
-            <?php $this->load->view($sidebar); ?>
-        <!--Sidebar -->
 
-        <div id="page-wrapper" class="gray-bg">
+        <div id="page-wrapper" class="gray-bg" style="min-height: 100vh;">
 
             <!--Navbar -->
                 <?php $this->load->view($navbar); ?>

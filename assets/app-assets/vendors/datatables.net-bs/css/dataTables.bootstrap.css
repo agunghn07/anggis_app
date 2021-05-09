@@ -97,9 +97,12 @@ table.dataTable thead .sorting_desc_disabled:after {
   opacity: 0.5;
 }
 table.dataTable thead .sorting:after {
-  opacity: 0.2;
+  opacity: 1;
   content: "\e150";
   /* sort */
+  color: #fff;
+  font-weight: normal;
+  font-size: 10px;
 }
 table.dataTable thead .sorting_asc:after {
   content: "\e155";

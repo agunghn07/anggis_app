@@ -5,14 +5,8 @@ class MY_Controller extends CI_Controller {
 		parent:: __construct();
 		date_default_timezone_set('Asia/Jakarta');
 		$this->load->model('LoginModel','login', TRUE);
-		$this->load->model('MasterModel','master', TRUE);
-		$this->load->model('PengajuanCutiModel','pengajuan', TRUE);
-		$this->load->model('NotifikasiSurelModel','notif', TRUE);
-		$this->load->model('PersetujuanCutiModel', 'persetujuan', TRUE);
-		$this->load->model('HistoryCutiModel', 'history', TRUE);
-		$this->load->model('ListPengajuanCutiModel', 'listPengajuan', TRUE);
+		$this->load->model('MasterListModel','ListModel', TRUE);
 		$this->load->helper('url');
-		$this->load->library('mailer');
 		$this->checkAuth(false);
 	}
 

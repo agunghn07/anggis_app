@@ -17,3 +17,7 @@
 <script src="<?php echo base_url().'assets/app-assets/vendors/datatables.net-responsive/js/dataTables.responsive.js'?>"></script>
 <script src="<?php echo base_url().'assets/app-assets/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js'?>"></script>
 <script src="<?php echo base_url().'assets/js/input.js'?>"></script>
+
+<!-- COMMON -->
+<script src="<?php echo base_url().'assets/js/common.js'?>"></script>
+<script src="<?php echo base_url().'assets/js/jquery.blockUI.js'?>"></script>

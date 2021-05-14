@@ -27,12 +27,16 @@
     #tblDetail tbody td{
         padding: 5px;
     }
+
+    #modalMasterList input, #modalMasterList textarea{
+        font-size: 12px;
+    }
 </style>
 
 <div class="modal fade in" id="modalMasterList" tabindex="-1" role="dialog" aria-hidden="true" style="font-size: 12px">
     <div class="modal-dialog" style="width: 37%; margin: 20px auto;">
-        <div class="modal-content animated bounceInDown">
-            <div class="modal-header" style="padding: 13px 15px;background-color: #17b39e;color: #fff;">
+        <div class="modal-content animated bounceInDown" style="border-radius: 10px">
+            <div class="modal-header" style="padding: 8px 15px;background-color: #17b39e;color: #fff; border-radius: 5px 5px 0 0;">
                 <span id='titleAddEditMasterList' style="margin: 0px; font-size: 14px;"></span>
             </div>
             <div class="modal-body">
@@ -46,7 +50,7 @@
                     </div>
                     <div class="form-group description"><label class="col-lg-2 control-label">Description</label>
                         <div class="col-lg-10">
-                            <textarea name="" id="description" name="nDescription" class="form-control" rows="5"></textarea>
+                            <textarea name="" id="description" name="nDescription" class="form-control" rows="5" spellcheck="false"></textarea>
                             <small class="text-danger description"></small>
                         </div>
                     </div>
@@ -76,7 +80,7 @@
                                         </table>
                                     </div>
                                 </div>
-                                <button id="btnAddDtl" class="btn btn-sm btn-info" type="button">Add</button>
+                                <button id="btnAddDtl" class="btn btn-xs btn-outline btn-info" type="button">Add</button>
                             </div>
                         </div>
                     </div>
@@ -84,8 +88,8 @@
             </div>
             <div class="modal-footer">
                 <div class="col-lg-offset-2 col-lg-10">
-                    <button class="btn btn-sm btn-primary btn-outline" id="btnSumbit" type="button">Submit</button>
-                    <button class="btn btn-sm btn-warning btn-outline" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-xs btn-primary btn-outline" id="btnSubmit" type="button">Submit</button>
+                    <button class="btn btn-xs btn-warning btn-outline" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
         </div>

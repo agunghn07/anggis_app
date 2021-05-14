@@ -10,9 +10,12 @@
         <div class="navbar-collapse collapse" id="navbar">
             <ul class="nav navbar-nav">
                 <li class="active">
-                    <a aria-expanded="false" role="button" href="layouts.html" style="color: #17b39e !important;"> Back to main Layout page</a>
+                    <a aria-expanded="false" role="button" href="<?php echo base_url('MasterList') ?>" style="color: #17b39e !important;"> Back
+                        to main Layout page</a>
                 </li>
-
+                <li>
+                    <a  href="<?php echo base_url('MainMenu') ?>"> Main Menu</a>
+                </li>
 
             </ul>
             <ul class="nav navbar-top-links navbar-right">

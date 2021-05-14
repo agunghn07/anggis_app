@@ -6,6 +6,7 @@ class MY_Controller extends CI_Controller {
 		date_default_timezone_set('Asia/Jakarta');
 		$this->load->model('LoginModel','login', TRUE);
 		$this->load->model('MasterListModel','ListModel', TRUE);
+		$this->load->model('MainMenuModel','MModel', TRUE);
 		$this->load->helper('url');
 		$this->checkAuth(false);
 	}

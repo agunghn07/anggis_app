@@ -3,6 +3,7 @@ var index = 0; var sequence = 1;
 var save_method = null;
 
 $(document).ready(function(){
+    popUpProgressShow();
     tableList = $('#tableList').DataTable({
         "processing": true, 
         "serverSide": true, 
@@ -25,16 +26,21 @@ $(document).ready(function(){
         "columnDefs": [{
             "targets": [3, 4, 5], 
             "orderable": false, 
-        }]
+        }],
+        "initComplete": function (settings, json) {
+            popUpProgressHide();
+        },
     });
 
     $("#btnAddMasterList").on("click", function(){
+        save_method = "ADD";
         index = 0; sequence = 1;
         $("#titleAddEditMasterList").text('Tambah Data')
         $("#modalMasterList").modal("show");
         $('#formAddEdit')[0].reset();
+        $("#btnSubmit").text("Save");
         initialModal();
-        btnAddDtl_onClick();
+        btnAddDtl_onClick();        
     });
 
     $("#checkallDetail").click(function() {
@@ -72,20 +78,54 @@ $(document).ready(function(){
         isGriDetailEmpty();
     });
 
-    $("#btnSumbit").on("click", function(){
+    $("#btnSubmit").on("click", function(){
         var method = null;
         var validation = validate();
         if (validation != 1) {
-            var url = "";
+            var url = site_url + "MasterList/AddOrUpdateData";
             if (save_method == 'ADD') {
-                $('#btnAddOrUpdate').text('Saving...').prop("disabled", true);
-                method = "@CommonConstant.SCREEN_MODE_ADD";
+                $('#btnSubmit').text('Saving...').prop("disabled", true);
+                method = save_method;
             } else {
-                $("#btnAddOrUpdate").text("Updating...").prop("disabled", true);
-                method = "@CommonConstant.SCREEN_MODE_EDIT";
+                $("#btnSubmit").text("Updating...").prop("disabled", true);
+                method = save_method;
             }
             processWithAjax(getDataValue(method), url, method);
         }
+    });
+
+    $(document).on("click", "#btnEdit", function(){
+        var id = $(this).data("id");
+        popUpProgressShow();
+        save_method = "UPDATE";
+        index = 0; sequence = 1;
+        $("#titleAddEditMasterList").text('Edit Data')
+        $("#btnSubmit").text("Update");
+        initialModal();
+        getEdiViewtDataById(id, save_method);
+    });
+
+    $(document).on("click", "#btnDelete", function(){
+        var data = new Object();
+        data.ID = $(this).data("id");
+        data.Method = "DELETE";
+        var url = site_url + "MasterList/deleteData";
+        swal({
+            title: "Caution",
+            text: "Would you like to delete ?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Delete",
+            cancelButtonText: "Cancel",
+            closeOnConfirm: false,
+            closeOnCancel: true
+        },
+       function (isConfirm) {
+           if (isConfirm) {
+               processWithAjax(data, url, data.Method);
+           }
+       });
     });
 });
 
@@ -96,6 +136,7 @@ function initialModal(){
     $('#btnDelDtl').remove();
     $("#tblDetail tbody tr").remove();
     $(".modal-body").animate({ scrollTop: 0 }, 'slow');
+    $("input[type=checkbox]").prop("checked", false);
 }
 
 function btnAddDtl_onClick(flagData) {
@@ -114,7 +155,7 @@ function btnAddDtl_onClick(flagData) {
            '</td>' +
        '</tr>'
     );
-    // onCheckEmptyField(index);
+    onCheckEmptyField(index);
     sequence++;
     index++;
     isGriDetailEmpty();
@@ -127,7 +168,7 @@ function isGriDetailEmpty() {
     } else if ($('#tblDetail tbody tr').length == 0) {
         $('#tblDetail tbody').append('<tr id="emptyGridDetailData"><td colspan="5"><center>There is no data</center></td></tr>');
     } else {
-        $('.divButtonDetail').append('<button id="btnDelDtl" class="btn btn-sm btn-danger" type="button">Del</button>');
+        $('.divButtonDetail').append('<button id="btnDelDtl" class="btn btn-xs btn-outline btn-danger" type="button">Del</button>');
     }
 }
 
@@ -169,4 +210,122 @@ function showErrorTextOnField(attr1, attr2, i) {
     element.closest(".form-group." + attr2).addClass("has-error");
     $(".text-danger." + attr2 + (attr1 == 'tblDetail' ? i : "")).text("Field tidak boleh kosong");
     return errorIndex = 1;
+}
+
+function onCheckEmptyField(i) {
+    $(document).on("keyup",
+        "#subDetail" + i + "," +
+        "#title," +
+        "#description", function () {
+            clearOnKeyDown(this);
+        });
+}
+
+function clearOnKeyDown(element) {
+    $(element).closest(".has-error").removeClass("has-error");
+    $(".text-danger." + $(element).attr("id")).text("");
+}
+
+function getDataValue(method) {
+    var params = new Object();
+    var data = new Object();
+
+    data.ID = $("#idList").val();
+    data.TITLE = $("#title").val();
+    data.DESCRIPTION = $("#description").val();
+    data.listDetail = [];
+
+    $("#tblDetail").children('tbody').children('tr').each(function () {
+        var dtl = new Object();
+        var trObj = jQuery(this);
+
+        dtl.ID = trObj.children('td').eq(0).children('input').val();
+        dtl.ID_LIST = null;
+        dtl.DESCRIPTION = trObj.children('td').eq(2).children('input').val();
+
+        data.listDetail.push(dtl);
+    });
+    params.method = method;
+    params.data = data;
+    return params;
+}
+
+function processWithAjax(getData, linkURL, method) {
+    popUpProgressShow();
+    $.ajax({
+        type: "POST",
+        url: linkURL,
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        dataType: 'json',
+        processData: true,
+        data: getData,
+        success: function (data) {
+            if (data.status == false) {
+                swal("Ooppss!", data.message, "error");
+            } else {                
+                tableList.ajax.reload();
+                swal({
+                    title: "Great!",
+                    text: data.message,
+                    showConfirmButton: true,
+                    confirmButtonColor: '#00BFFF',
+                    type: "success"
+                },
+                function () {
+                    if(method != "DELETE"){
+                        $("#modalMasterList").modal("hide");
+                    }
+                });
+            }
+            changeTextButton(method);
+            popUpProgressHide();
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            popUpProgressHide();
+            console.log("Status: " + textStatus, "Error: " + errorThrown);
+            console.log(XMLHttpRequest);
+        }
+    });
+}
+
+function changeTextButton(method) {
+    if (method == 'ADD') {
+        $('#btnSubmit').text("Save").prop("disabled", false);
+    } else if (method == 'UPDATE') {
+        $('#btnSubmit').text("Update").prop("disabled", false);
+    }
+}
+
+function getEdiViewtDataById(id, method) {
+    $.ajax({
+        type: "POST",
+        url: site_url + "MasterList/getDataById",
+        dataType: "JSON",
+        data: { ID: id },
+        success: function (data) {
+            popUpProgressHide();
+            onViewDataSuccess(data);
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            popUpProgressHide();
+            console.log("Status: " + textStatus, "Error: " + errorThrown);
+            console.log(XMLHttpRequest);
+        }
+    });
+}
+
+function onViewDataSuccess(returnResult) {
+    var data = returnResult;    
+    $("#modalMasterList").modal("show");
+
+    $("#idList").val(data.ID);
+    $("#title").val(data.TITLE);
+    $("#description").val(data.DESCRIPTION);
+
+    for (var i = 0; i < data.listDetail.length; i++) {
+        btnAddDtl_onClick();
+        $("#txtAddEditApprovalFlowId" + i).val(data.listDetail[i].ID)
+        $("#subDetail" + i).val(data.listDetail[i].DESCRIPTION);
+    }
+    isGriDetailEmpty();
 }

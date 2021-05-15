@@ -73,6 +73,16 @@ class MainMenuModel extends CI_Model {
         return $this->db->count_all_results();
     }
 
+    public function getCountAllList(){
+        $query = $this->db->get("tb_m_list");
+        return $query->num_rows();
+    }
+
+    public function getCheckedList($no_babp){
+        $query = $this->db->distinct()->select("ID_LIST")->where("ID_BABP", $no_babp)->get("tb_r_checklist");
+        return $query->num_rows();
+    }
+
     public function getDataChecklist(){
         $returnData = array();
         $initData = array(
@@ -97,6 +107,7 @@ class MainMenuModel extends CI_Model {
         $this->db->trans_start();
         $this->db->trans_strict(true);
 
+        $returnValue = ["bool" => true, "ID_NOTE" => null, "checkList" => array()];
         $dataNote = array(
             "ID"      => $data["ID"],
             "ID_LIST" => $data["ID_LIST"],
@@ -106,38 +117,54 @@ class MainMenuModel extends CI_Model {
 
         if(strlen($dataNote["ID"]) == 0){
             $this->db->insert("tb_r_note", $dataNote);
+            $returnValue["ID_NOTE"] = $this->db->insert_id();
         }else{
             $this->db->where(array("ID" => $dataNote["ID"], "ID_LIST" => $dataNote["ID_LIST"], "ID_BABP" => $dataNote["ID_BABP"]));
             $this->db->update("tb_r_note", $dataNote);
+            $returnValue["ID_NOTE"] = $dataNote["ID"];
+        }
+        
+        if(array_key_exists("checkList", $data)){
+            $idSubList = array();
+            foreach($data["checkList"] as $i){
+                $temp = array(
+                    "ID"         => $i["ID"],
+                    "ID_SUBLIST" => $i["ID_SUBLIST"]
+                );
+                array_push($idSubList, $temp);
+            }
+
+            $notInChecked = array();
+            foreach($idSubList as $j){
+                array_push($notInChecked, $j["ID_SUBLIST"]);
+            }
+            $queryString = "DELETE FROM tb_r_checklist WHERE ID_LIST = ? AND ID_BABP = ? AND ID_SUBLIST NOT IN ?";
+            $this->db->query($queryString, array($dataNote["ID_LIST"], $dataNote["ID_BABP"],  $notInChecked));
+
+            $index = 0;
+            foreach($data["checkList"] as $k){
+                if(strlen($k["ID"]) == 0){
+                    $this->db->insert("tb_r_checklist", $k);
+                    $idSubList[$index]["ID"] = $this->db->insert_id();
+                }else{
+                    $this->db->where(array("ID" => $k["ID"], "ID_LIST" => $k["ID_LIST"], "ID_BABP" => $k["ID_BABP"], "ID_SUBLIST" => $k["ID_SUBLIST"]));
+                    $this->db->update("tb_r_checklist", $k); 
+                }
+                $index++;
+            }
+            $returnValue["checkList"] = $idSubList;
+        }else{
+            $this->db->delete("tb_r_checklist", array("ID_LIST" => $dataNote["ID_LIST"], "ID_BABP" => $dataNote["ID_BABP"]));
         }
 
-        if($this->db->affected_rows() != 0){
-            if(array_key_exists("checkList", $data)){
-                $idSubList = array();
-                foreach($data["checkList"] as $i){
-                    array_push($idSubList, $i["ID_SUBLIST"]);
-                }
-                $queryString = "DELETE FROM tb_r_checklist WHERE ID_LIST = ? AND ID_BABP = ? AND ID_SUBLIST NOT IN ?";
-                $this->db->query($queryString, array($dataNote["ID_LIST"], $dataNote["ID_BABP"], $idSubList));
-
-                foreach($data["checkList"] as $k){
-                    if(strlen($k["ID"]) == 0){
-                        $this->db->insert("tb_r_checklist", $k);
-                    }else{
-                        $this->db->where(array("ID" => $k["ID"], "ID_LIST" => $k["ID_LIST"], "ID_BABP" => $k["ID_BABP"], "ID_SUBLIST" => $k["ID_SUBLIST"]));
-                        $this->db->update("tb_r_checklist", $k);
-                    }
-                }
-            }else{
-                $this->db->delete("tb_r_checklist", array("ID_LIST" => $dataNote["ID_LIST"], "ID_BABP" => $dataNote["ID_BABP"]));
-            }
-            if($this->db->trans_status() === FALSE){
-                $this->db->trans_rollback();
-                return false;
-            }
+        if($this->db->trans_status() === FALSE){
+            $this->db->trans_rollback();
+            $returnValue["bool"] = false;
+            return $returnValue;
         }
+        
         $this->db->trans_commit();
-        return true;
+        return $returnValue;
     }
 
     public function getCheckById($id){
@@ -154,13 +181,28 @@ class MainMenuModel extends CI_Model {
                 $tempData["ID"] = $r->ID;
                 $tempData["NOTE"] = $r->NOTE;
 
-                $query = $this->db->get_where("tb_r_checklist", array("ID_BABP" => $r->ID_BABP, "ID_LIST" => $r->ID_LIST));
-                if($query->num_rows() != 0){
-                    $tempData["checkList"] =  $query->result_object();
-                }
+                $tempData["checkList"] = $this->db->get_where(
+                    "tb_r_checklist", array("ID_BABP" => $r->ID_BABP, "ID_LIST" => $r->ID_LIST)
+                )->result_object();
+
                 array_push($returnData, $tempData);
             }
         }
         return $returnData;
+    }
+
+    public function insertDataBabp($data){
+        $this->db->trans_start();
+        $this->db->trans_strict(true);
+
+        $this->db->insert("tb_r_babp", $data);
+
+        if($this->db->trans_status() === FALSE){
+            $this->db->trans_rollback();
+            return false;
+        }
+
+        $this->db->trans_commit();
+        return true;
     }
 }

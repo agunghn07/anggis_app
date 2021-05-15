@@ -8,9 +8,6 @@
 <script src="<?php echo base_url(); ?>assets/js/inspinia.js"></script>
 <script src="<?php echo base_url(); ?>assets/js/plugins/pace/pace.min.js"></script>
 
-<!-- iCheck -->
-<script src="<?php echo base_url(); ?>assets/js/plugins/iCheck/icheck.min.js"></script>
-
 <!-- DATATABLE -->
 <script src="<?php echo base_url().'assets/app-assets/vendors/datatables.net/js/jquery.dataTables.js'?>"></script>
 <script src="<?php echo base_url().'assets/app-assets/vendors/datatables.net-bs/js/dataTables.bootstrap.js'?>"></script>

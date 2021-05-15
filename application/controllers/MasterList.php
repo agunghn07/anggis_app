@@ -37,12 +37,12 @@ class MasterList extends MY_Controller {
             $row[] = '<center>' . $i->CREATED_BY . '</center>';
             $row[] = '
 				<center>
-					<a class="btn btn-sm btn-warning" id="btnEdit" style="padding: 0px 3px;" title="Edit" data-id="'.$i->ID.'">
+					<a class="btn btn-sm btn-info" id="btnEdit" style="padding: 0px 3px;" title="Edit" data-id="'.$i->ID.'">
 						<small>
 							<i class="glyphicon glyphicon-pencil"></i>
 						</small>
 					</a>
-					<a class="btn btn-sm btn-danger" id="btnDelete" style="padding: 0px 3px;" title="Hapus" data-id="'.$i->ID.'">
+					<a class="btn btn-sm btn-warning" id="btnDelete" style="padding: 0px 3px;" title="Hapus" data-id="'.$i->ID.'">
 						<small>
 							<i class="glyphicon glyphicon-trash"></i>
 							</small>

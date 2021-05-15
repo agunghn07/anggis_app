@@ -20,7 +20,7 @@
                 <div class="ibox-content" style="padding: 30px 20px;">
                     <div class="row">
                         <div class="justify-content-center">
-                            <button class="btn btn-outline btn-primary dim" id="btnAddMasterList" style="font-size: 12px;"><span
+                            <button class="btn btn-outline btn-primary dim" id="btnAddBabp" style="font-size: 12px;"><span
                                     class="spanAdd">Tambah <br> Data</span></button>
                         </div>
                     </div>
@@ -50,6 +50,8 @@
                                         <th>Kelengkapan Dokumen</th>
                                         <th>Regn</th>
                                         <th>Tanggal BAP</th>
+                                        <th>Anak Persoalan Pengadaan</th>
+                                        <th>Perusahaan</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>

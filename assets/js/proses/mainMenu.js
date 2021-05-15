@@ -36,7 +36,8 @@ $(document).ready(function(){
         $("#id_babp").val($(this).data("id"));        
         $('#wizard .wizard_steps li:not(:first) a').attr("isdone", 0).removeClass().addClass('disabled');
         $("input[type=checkbox]").prop("checked", false).val("");
-        $("#modalMainMenu textarea").val("");
+        $("#modalMainMenu textarea, .idNote").val("");
+        $(".idNote").val("");
         getChecklistData($(this).data("id"));
     });
 
@@ -91,6 +92,30 @@ $(document).ready(function(){
 
     $(document).on("change", "#date_babp", function(){
         clearOnKeyDown(this);
+    });
+
+    $(document).on("click", "#btnDelete", function(){
+        var data = new Object();
+        var method = "DELETE";
+
+        data.ID = $(this).data("id");
+        var url = site_url + "MainMenu/deleteDataBabp";
+        swal({
+            title: "Caution",
+            text: "Would you like to delete ?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Delete",
+            cancelButtonText: "Cancel",
+            closeOnConfirm: false,
+            closeOnCancel: true
+        },
+       function (isConfirm) {
+           if (isConfirm) {
+               processWithAjax(data, url, null, null, method);
+           }
+       });
     });
 });
 
@@ -151,15 +176,23 @@ function processWithAjax(getData, linkURL, currentIndex, isFinish, method) {
         processData: true,
         data: getData,
         success: function (data) {
-            console.log(data);
             if (data.status == false) {
                 swal("Ooppss!", data.message, "error");
             } else {
                 if(method != null){
-                    swal("Great!", data.message, "success");
-                    $("#modalAddBabp").modal("hide");
-                    tableList.ajax.reload();
-                    changeTextButton(method);
+                    if(method == "ADD"){
+                        if(data.isExsistBabp){
+                            $("#no_babp").closest(".form-group.no_babp").addClass("has-error");
+                            $(".text-danger.no_babp").text("Nomor BABP " + getData.data.NO_BABP + " sudah ada !");
+                        }else{
+                            swal("Great!", data.message, "success");
+                            $("#modalAddBabp").modal("hide");                 
+                        }
+                        changeTextButton(method);
+                    }else{
+                        swal("Great!", data.message, "success");
+                    }
+                    tableList.ajax.reload(); 
                 } else{
                     if(isFinish){                    
                         $("#modalMainMenu").modal("hide");

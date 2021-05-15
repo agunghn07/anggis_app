@@ -97,17 +97,38 @@ class MainMenu extends MY_Controller {
 	}
 
 	public function AddDataBabp(){
-		$parse  = array('status' => false, 'message' => null);
+		$parse  = array('status' => false, 'message' => null, "isExsistBabp" => false);
 		$data = array(
 			'NO_BABP'      => $this->input->post("data")["NO_BABP"],
 			'TANGGAL_BABP' => date('Y-m-d', strtotime($this->input->post("data")["TANGGAL_BABP"])),
 			'APP'          => $this->input->post("data")["APP"],
 			'PERUSAHAAN'   => $this->input->post("data")["PERUSAHAAN"] 
 		);
-		$result = $this->MModel->insertDataBabp($data);
 
-		$parse["message"] = $result == false ? "Looks like there's an error, please contact your administrator." : "Process ADD Data BABP Finish Succesfully";
-		$parse["status"]  = $result;
+		$checkNoBabp = $this->MModel->checkExistingBabp($data["NO_BABP"]);
+		if($checkNoBabp){
+			$parse["status"] = true;
+			$parse["isExsistBabp"] = $checkNoBabp;
+		}else{
+			$result = $this->MModel->insertDataBabp($data);
+
+			$parse["message"] = $result == false ? "Looks like there's an error, please contact your administrator." : "Process ADD Data BABP Finish Succesfully";
+			$parse["status"]  = $result;
+		}
+
+		echo json_encode($parse);
+	}
+
+	public function deleteDataBabp(){
+		$parse  = array('status' => false, 'message' => null);
+
+		$ID     = $this->input->post('ID');
+		$table  = ["tb_r_checklist", "tb_r_note", "tb_r_babp"];
+
+		$resultDelete = $this->MModel->deleteData($table, $ID);
+
+		$parse["message"] = $resultDelete == false ? "Looks like there's an error, please contact your administrator." : "Process DELETE Data Finish Succesfully";
+		$parse["status"]  = $resultDelete;
 
 		echo json_encode($parse);
 	}

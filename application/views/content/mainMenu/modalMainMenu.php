@@ -75,7 +75,7 @@ label {
                     <div id="step-<?php echo $row; ?>">
                         <input type="hidden" id="id_list_<?php echo $row; ?>" class="idList"
                             value="<?php echo $data["ID"]; ?>">
-                        <input type="hidden" id="idNote_<?php echo $row; ?>">
+                        <input type="hidden" id="idNote_<?php echo $row; ?>" class="idNote">
                         <h2 class="StepTitle"><?php echo $data["DESCRIPTION"]; ?></h2>
                         <hr
                             style="margin-top: 0px !important; margin-bottom: 15px; border-top: 1px solid #34495E !important;">

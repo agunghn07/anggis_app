@@ -205,4 +205,32 @@ class MainMenuModel extends CI_Model {
         $this->db->trans_commit();
         return true;
     }
+
+    public function checkExistingBabp($no_babp){
+        $exists = false;
+        $query = $this->db->get_where("tb_r_babp", array("NO_BABP" => $no_babp));
+        if($query->num_rows() != 0){
+            $exists = true;
+        }
+        return $exists;
+    }
+
+    public function deleteData($table, $id){
+        $this->db->trans_start();
+        $this->db->trans_strict(true);
+
+        for($i = 0; $i < count($table); $i++){
+            $whereClause = $i != 2 ? "ID_BABP" : "NO_BABP";
+            $this->db->where($whereClause, $id);
+            $this->db->delete($table[$i]);
+        }
+        
+        if($this->db->trans_status() === FALSE){
+            $this->db->trans_rollback();
+            return false;
+        }
+       
+        $this->db->trans_commit();
+        return true;
+    }
 }

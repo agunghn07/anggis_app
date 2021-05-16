@@ -6,41 +6,27 @@ class LoginModel extends CI_Model {
 		$username = $this->input->post('username', true);
 		$password = $this->input->post('password', true);
 
-		$sql   = "
-			SELECT emp.noreg, logon.password, logon.status, emp.username, emp.position 
-			FROM tb_r_logon logon 
-			JOIN tb_r_employee emp 
-			ON emp.NOREG = logon.NOREG 
-			WHERE emp.username =  '{$username}' LIMIT 1
-		";
-
-		$result= $this->db->query($sql);
-		$row   = $result->row();
+		$result = $this->db->select('ID, USERNAME, PASSWORD, ROLE')->where("USERNAME", $username)->get("tb_m_user");
+		$row = $result->row();
 
 		if($result->num_rows() === 1){
-			if($row->position == 1){
-				return $this->verifyPassword($password, $row);
-			}else{
-				if($row->status == 1){
-					return $this->verifyPassword($password, $row);
-				}else{
-					return 'not_activated';
-				}
-			}
+			return $this->verifyPassword($password, $row);
 		}else{
 			return 'username_not_found';
 		}
 	}
 
 	private function verifyPassword($password, $row){
-		if(password_verify($password, $row->password)){
+		if($password == $row->PASSWORD){
 			$sess_ = array(
-				'Noreg'		=> $row->noreg,
-				'Username'  => $row->username,
-				'backToken' => crypt($row->name,'')
+				'Id'		=> $row->ID,
+				'Username'  => $row->USERNAME,
+				'Role'      => $row->ROLE,
+				'backToken' => crypt($row->USERNAME,'')
 			);
 			$this->set_session($sess_);
-			return 'employee';
+			
+			return 'verified';
 		}else{
 			return 'incorrect_password';
 		}
@@ -48,8 +34,9 @@ class LoginModel extends CI_Model {
 
 	private function set_session($sess_){
 		$sess_data = array(
-			'Noreg'		=> $sess_['Noreg'],
+			'Id'		=> $sess_['Id'],
 			'Username'	=> $sess_['Username'],
+			'Role'	=> $sess_['Role'],
 			'backToken'	=> $sess_['backToken']
 		);
 		$this->session->set_userdata($sess_data);
@@ -66,8 +53,6 @@ class LoginModel extends CI_Model {
 	}
 
 	public function registToken($data){
-		// $query = "INSERT INTO login_details (user_id) VALUES ('".$this->session->userdata('id_')."')";
-		// $this->db->query($query);
 		$this->db->insert('tb_r_token', $data);
 		return $this->db->insert_id();
 	}

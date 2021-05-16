@@ -16,11 +16,15 @@ class MasterList extends MY_Controller {
 
     public function index()
 	{
-        $this->parseData['title']   = 'Master List';
-        $this->parseData['menu']    = 'Dashboard';
-        $this->parseData['submenu'] = 'Master List';
-		$this->parseData['content'] = 'content/master/masterList';
-		$this->load->view('MainView/backendView', $this->parseData);
+		if($this->session->userdata("Role") == "admin"){
+			$this->parseData['title']   = 'Master List';
+			$this->parseData['menu']    = 'Dashboard';
+			$this->parseData['submenu'] = 'Master List';
+			$this->parseData['content'] = 'content/master/masterList';
+			$this->load->view('MainView/backendView', $this->parseData);
+		}else{
+			$this->notfound();
+		}
     }
 
 	public function getDataList(){

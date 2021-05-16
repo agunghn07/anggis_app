@@ -8,7 +8,7 @@ class MY_Controller extends CI_Controller {
 		$this->load->model('MasterListModel','ListModel', TRUE);
 		$this->load->model('MainMenuModel','MModel', TRUE);
 		$this->load->helper('url');
-		$this->checkAuth(false);
+		$this->checkAuth(true);
 	}
 
 	public $parseData = [
@@ -38,7 +38,7 @@ class MY_Controller extends CI_Controller {
 				redirect('Auth/login');
 			}else{
 				if(!$this->login->checkToken($this->session->userdata('backToken'))){
-					redirect('MainPage/logout');
+					redirect('Auth/login/logout');
 				}
 			}
 		}

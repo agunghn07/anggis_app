@@ -9,10 +9,12 @@
         </div>
         <div class="navbar-collapse collapse" id="navbar">
             <ul class="nav navbar-nav">
+                <?php if($this->session->userdata("Role") == "admin") { ?>
                 <li class="active">
                     <a aria-expanded="false" role="button" href="<?php echo base_url('MasterList') ?>" style="color: #17b39e !important;"> Back
                         to main Layout page</a>
                 </li>
+                <?php } ?>
                 <li>
                     <a  href="<?php echo base_url('MainMenu') ?>"> Main Menu</a>
                 </li>
@@ -23,7 +25,7 @@
                     <span class="m-r-sm text-muted welcome-message">Welcome Anggis Doc App</span>
                 </li>
                 <li>
-                    <a href="login.html">
+                    <a href="<?php echo base_url('Auth/login/logout'); ?>">
                         <i class="fa fa-sign-out"></i> Log out
                     </a>
                 </li>

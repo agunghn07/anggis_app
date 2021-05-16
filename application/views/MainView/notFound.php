@@ -29,7 +29,7 @@
         <div class="error-desc">
             Sorry, but the page you are looking for has note been found. Try checking the URL for error, then hit the refresh button on your browser or back to dashboard.
             <div class="row" style="margin-top: 15px;">
-                <a href="<?php echo base_url('MainPage') ?>" class="btn btn-primary">Dashboard</a>    
+                <a href="<?php echo base_url('MainMenu') ?>" class="btn btn-primary">Dashboard</a>    
             </div>
         </div>
     </div>

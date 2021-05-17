@@ -30,7 +30,7 @@ class MainMenu extends MY_Controller {
 		foreach ($list as $i) {
 			$countAllSubist = $this->MModel->getcountAllSubist();
 			$countCheckedList = $this->MModel->getCheckedList($i->NO_BABP);
-			$persentage = round($countCheckedList * 100 / $countAllSubist, 2);
+			$persentage = round($countCheckedList * 100 / $countAllSubist, 0);
 			$regn = $countAllSubist - $countCheckedList;
 			$status = $countCheckedList == $countAllSubist ? "Done" : "On Progress";
 			$backgroundStatus = $status == "Done" ? "#24ac58" : "#778295";

@@ -73,13 +73,13 @@ class MainMenuModel extends CI_Model {
         return $this->db->count_all_results();
     }
 
-    public function getCountAllList(){
-        $query = $this->db->get("tb_m_list");
+    public function getcountAllSubist(){
+        $query = $this->db->get("tb_m_sublist");
         return $query->num_rows();
     }
 
     public function getCheckedList($no_babp){
-        $query = $this->db->distinct()->select("ID_LIST")->where("ID_BABP", $no_babp)->get("tb_r_checklist");
+        $query = $this->db->where("ID_BABP", $no_babp)->get("tb_r_checklist");
         return $query->num_rows();
     }
 

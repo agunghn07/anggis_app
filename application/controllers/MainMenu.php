@@ -28,11 +28,11 @@ class MainMenu extends MY_Controller {
 		$list = $this->MModel->get_datatables();
 		$data = array();
 		foreach ($list as $i) {
-			$countAllList = $this->MModel->getCountAllList();
+			$countAllSubist = $this->MModel->getcountAllSubist();
 			$countCheckedList = $this->MModel->getCheckedList($i->NO_BABP);
-			$persentage = $countCheckedList * 100 / $countAllList;
-			$regn = $countAllList - $countCheckedList;
-			$status = $countCheckedList == $countAllList ? "Done" : "On Progress";
+			$persentage = round($countCheckedList * 100 / $countAllSubist, 2);
+			$regn = $countAllSubist - $countCheckedList;
+			$status = $countCheckedList == $countAllSubist ? "Done" : "On Progress";
 			$backgroundStatus = $status == "Done" ? "#24ac58" : "#778295";
 
             $row = array();

@@ -59,7 +59,7 @@ class Login extends CI_Controller {
 	}
 
 	public function registToken(){
-		$data = ['user_id' => $this->session->userdata('Noreg'), 'access_token' => $this->session->userdata('backToken')];
+		$data = ['user_id' => $this->session->userdata('Id'), 'access_token' => $this->session->userdata('backToken')];
 		$logId = $this->login->registToken($data);
 		$this->message('Halo '.$this->session->userdata("Username"). '!','Welcome to Anggis App','success');
 		redirect('MainMenu');

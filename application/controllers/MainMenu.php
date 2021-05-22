@@ -34,6 +34,7 @@ class MainMenu extends MY_Controller {
 			$regn = $countAllSubist - $countCheckedList;
 			$status = $countCheckedList == $countAllSubist ? "Done" : "On Progress";
 			$backgroundStatus = $status == "Done" ? "#24ac58" : "#778295";
+			$isDisable = $i->FLAG == 0 ? ($regn == 0 ? "" : "disabled") : "";
 
             $row = array();
             $row[] = '<center>' . $i->NO_BABP . '</center>' ;
@@ -47,9 +48,9 @@ class MainMenu extends MY_Controller {
 			';
 			$row[] = '<center><span class="label" style="background-color: #ff9fa2; font-weight: bold;" border-radius: 5px;>'. $regn .'</span></center>';
             $row[] = '<center>' . date('d M Y', strtotime($i->TANGGAL_BABP)) . '</center>';
-			$row[] = '<center>' . $i->APP . '</center>';
-			$row[] = '<center>' . $i->PERUSAHAAN . '</center>';
-			$row[] = '<center><span class="label" style="background-color: '. $backgroundStatus .'; color: #fff; border-radius: 5px;">'. $status .'</span></center>';
+			$row[] = $i->APP;
+			$row[] = $i->PERUSAHAAN;
+			$row[] = '<span class="label" style="background-color: '. $backgroundStatus .'; color: #fff; border-radius: 5px;">'. $status .'</span>';
             $row[] = '
 				<center>
 					<a class="btn btn-sm btn-outline" style="border-radius: 20px; padding: 0px 5px; margin: 0px; background-color: #edc839; border-style: none; color: #778295 !important;" 
@@ -64,8 +65,19 @@ class MainMenu extends MY_Controller {
 							<i class="glyphicon glyphicon-trash"></i>
 							</small>
 					</a>
-				</center>
 			';
+
+			if($this->session->userdata("Role") == "admin"){
+				$row[7] = $row[7] .= '
+					<a class="btn btn-sm btn-primary" style="border-radius: 20px; padding: 0px 5px; margin: 0px;" 
+						id="btnClose" title="Close" data-id="'.$i->NO_BABP.'" '.$isDisable.'>
+						<small>
+							<i class="fa fa-check-square-o"></i>
+						</small>
+					</a>
+				';
+			}
+			$row[7] = $row[7] .= "</center>";
  
             $data[] = $row;
         }

@@ -24,7 +24,7 @@ $(document).ready(function(){
             "infoFiltered": ""
         },
         "columnDefs": [{
-            "targets": [1, 2, 3, 4, 5, 6, 7], 
+            "targets": [1, 2, 6, 7], 
             "orderable": false, 
         }],
         "initComplete": function (settings, json) {

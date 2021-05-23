@@ -2,8 +2,8 @@
 
 class MainMenuModel extends CI_Model {
     var $table = 'tb_r_babp';
-    var $column_order = array('NO_BABP', 'TANGGAL_BABP','CREATED_DT'); 
-    var $column_search = array('NO_BABP');  
+    var $column_order = array('NO_BABP', null, null, 'TANGGAL_BABP', 'APP', 'PERUSAHAAN'); 
+    var $column_search = array('NO_BABP', 'APP', 'PERUSAHAAN');  
     var $order = array('CREATED_DT' => 'desc');
 
     public function __construct()

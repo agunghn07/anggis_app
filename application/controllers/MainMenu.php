@@ -27,14 +27,15 @@ class MainMenu extends MY_Controller {
 	public function getDataList(){
 		$list = $this->MModel->get_datatables();
 		$data = array();
+		$countAllSubist = $this->MModel->getcountAllSubist();
+
 		foreach ($list as $i) {
-			$countAllSubist = $this->MModel->getcountAllSubist();
 			$countCheckedList = $this->MModel->getCheckedList($i->NO_BABP);
 			$persentage = round($countCheckedList * 100 / $countAllSubist, 0);
 			$regn = $countAllSubist - $countCheckedList;
 			$status = $countCheckedList == $countAllSubist ? "Done" : "On Progress";
 			$backgroundStatus = $status == "Done" ? "#24ac58" : "#778295";
-			$isDisable = $i->FLAG == 0 ? ($regn == 0 ? "" : "disabled") : "";
+			$isDisable = $i->FLAG == 0 ? ($regn == 0 ? "" : "disabled") : "disabled";
 
             $row = array();
             $row[] = '<center>' . $i->NO_BABP . '</center>' ;
@@ -50,16 +51,16 @@ class MainMenu extends MY_Controller {
             $row[] = '<center>' . date('d M Y', strtotime($i->TANGGAL_BABP)) . '</center>';
 			$row[] = $i->APP;
 			$row[] = $i->PERUSAHAAN;
-			$row[] = '<span class="label" style="background-color: '. $backgroundStatus .'; color: #fff; border-radius: 5px;">'. $status .'</span>';
+			$row[] = '<center><span class="label" style="background-color: '. $backgroundStatus .'; color: #fff; border-radius: 5px; display: inline-block; width: 75px; padding: 5px;">'. $status .'</span></center>';
             $row[] = '
 				<center>
-					<a class="btn btn-sm btn-outline" style="border-radius: 20px; padding: 0px 5px; margin: 0px; background-color: #edc839; border-style: none; color: #778295 !important;" 
+					<a class="btn btn-sm btn-outline" style="border-radius: 15px; padding: 1px; margin: 0px; background-color: #edc839; border-style: none; color: #778295 !important; width: 20px !important; height: 20px !important;" 
 						id="btnCeklist" title="Isi Ceklist" data-id="'.$i->NO_BABP.'">
 						<small>
 							<i class="fa fa-binoculars"></i>
 						</small>
 					</a>
-					<a class="btn btn-sm btn-outline btn-danger" style="border-radius: 20px; padding: 0px 5px; margin: 0px; background-color: #cb5150; border-style: none; color: #fff !important;" 
+					<a class="btn btn-sm btn-outline btn-danger" style="border-radius: 15px; padding: 1px; margin: 0px; background-color: #cb5150; border-style: none; color: #fff !important; width: 20px !important; height: 20px !important;" 
 						id="btnDelete" title="Hapus" data-id="'.$i->NO_BABP.'">
 						<small>
 							<i class="glyphicon glyphicon-trash"></i>
@@ -69,8 +70,8 @@ class MainMenu extends MY_Controller {
 
 			if($this->session->userdata("Role") == "admin"){
 				$row[7] = $row[7] .= '
-					<a class="btn btn-sm btn-primary" style="border-radius: 20px; padding: 0px 5px; margin: 0px;" 
-						id="btnClose" title="Close" data-id="'.$i->NO_BABP.'" '.$isDisable.'>
+					<a class="btn btn-sm '. ($i->FLAG == 0 ? 'btn-primary' : '') .'" style="border-radius: 15px; padding: 0px; margin: 0px; width: 20px !important; height: 20px !important;'. ($i->FLAG == 0 ? '' : 'background-color: #9E9E9E; color: #fff; opacity: 0.6;').'" 
+						id="btnClose" title="'.($i->FLAG == 0 ? 'Close' : 'Closed').'" data-id="'.$i->NO_BABP.'" '.$isDisable.'>
 						<small>
 							<i class="fa fa-check-square-o"></i>
 						</small>
@@ -142,6 +143,17 @@ class MainMenu extends MY_Controller {
 		$parse["message"] = $resultDelete == false ? "Looks like there's an error, please contact your administrator." : "Process DELETE Data Finish Succesfully";
 		$parse["status"]  = $resultDelete;
 
+		echo json_encode($parse);
+	}
+
+	public function closeChecklist(){
+		$parse  = array('status' => false, 'message' => null);
+		$ID     = $this->input->post('ID');
+		$result = $this->MModel->close($ID);
+
+		$parse["message"] = $result == false ? "Looks like there's an error, please contact your administrator." : "Process CLOSE Data Finish Succesfully";
+		$parse["status"]  = $result;
+		
 		echo json_encode($parse);
 	}
 }

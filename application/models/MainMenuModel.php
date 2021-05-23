@@ -168,12 +168,14 @@ class MainMenuModel extends CI_Model {
     }
 
     public function getCheckById($id){
-        $returnData = array();
+        $returnData = array("FLAG" => null, "list" => array());
         $tempData = array(
             "ID"        => null,
             "NOTE"      => null,
             "checkList" => []
         );
+        $returnData["FLAG"] = $this->db->select("FLAG")->where("NO_BABP", $id)->get("tb_r_babp")->row()->FLAG;
+
         $query = $this->db->get_where("tb_r_note", array("ID_BABP" => $id));
         if($query->num_rows() != 0){
             $result = $query->result_object();
@@ -185,7 +187,7 @@ class MainMenuModel extends CI_Model {
                     "tb_r_checklist", array("ID_BABP" => $r->ID_BABP, "ID_LIST" => $r->ID_LIST)
                 )->result_object();
 
-                array_push($returnData, $tempData);
+                array_push($returnData["list"], $tempData);
             }
         }
         return $returnData;
@@ -230,6 +232,21 @@ class MainMenuModel extends CI_Model {
             return false;
         }
        
+        $this->db->trans_commit();
+        return true;
+    }
+
+    public function close($id){
+        $this->db->trans_start();
+        $this->db->trans_strict(true);
+
+        $this->db->set("FLAG", 1)->where("NO_BABP", $id)->update("tb_r_babp");
+
+        if($this->db->trans_status() === FALSE){
+            $this->db->trans_rollback();
+            return false;
+        }
+
         $this->db->trans_commit();
         return true;
     }

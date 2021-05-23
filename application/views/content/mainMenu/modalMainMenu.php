@@ -76,7 +76,7 @@ label {
                         <input type="hidden" id="id_list_<?php echo $row; ?>" class="idList"
                             value="<?php echo $data["ID"]; ?>">
                         <input type="hidden" id="idNote_<?php echo $row; ?>" class="idNote">
-                        <h2 class="StepTitle"><?php echo $data["DESCRIPTION"]; ?></h2>
+                        <h2 class="StepTitle" style="color: #878787 !important;"><?php echo $data["DESCRIPTION"]; ?></h2>
                         <hr
                             style="margin-top: 0px !important; margin-bottom: 15px; border-top: 1px solid #34495E !important;">
                         <div class="row">
@@ -107,7 +107,7 @@ label {
                                         <tbody>
                                             <tr>
                                                 <td>
-                                                    <textarea class="form-control" id="note_<?php echo $row; ?>"
+                                                    <textarea class="form-control" style="background-color: #fff !important;" id="note_<?php echo $row; ?>"
                                                         rows="6" style="font-size: 12px" spellcheck="false"></textarea>
                                                 </td>
                                             </tr>

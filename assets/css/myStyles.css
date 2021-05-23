@@ -15,6 +15,10 @@ html {
 	overflow-x: hidden;
 }
 
+body{
+	font-family: cursive !important;
+}
+
 ::-webkit-scrollbar {
 	width: 0px;
 	/* remove scrollbar space */
@@ -321,6 +325,7 @@ table td{
     background-color: #17b39e;
 	border-radius: 5px;
 	font-size: 12px;
+	font-family: cursive !important;
 }
 
 .justify-content-center{

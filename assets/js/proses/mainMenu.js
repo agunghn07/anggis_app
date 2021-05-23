@@ -1,4 +1,5 @@
 var tableList;
+var globalFlag;
 
 $(document).ready(function(){
     init_SmartWizard();
@@ -35,8 +36,9 @@ $(document).ready(function(){
         $(".stepContainer").css("min-height", "245px");
         $("#id_babp").val($(this).data("id"));        
         $('#wizard .wizard_steps li:not(:first) a').attr("isdone", 0).removeClass().addClass('disabled');
-        $("input[type=checkbox]").prop("checked", false).val("");
+        $("input[type=checkbox]").prop("checked", false).prop("disabled", false).val("");
         $("#modalMainMenu textarea, .idNote").val("");
+        $("#modalMainMenu textarea").prop("disabled", false);
         $(".idNote").val("");
         getChecklistData($(this).data("id"));
     });
@@ -49,11 +51,17 @@ $(document).ready(function(){
     });
 
     $(".buttonNext, .buttonPrevious").on("click", function(){
-        processCheckData(false)
+        if(globalFlag != 1){
+            processCheckData(false)
+        }
     });
 
     $(".buttonFinish").on("click", function(){
-        processCheckData(true)
+        if(globalFlag != 1){
+            processCheckData(true)
+        }else{
+            $("#modalMainMenu").modal("hide");
+        }
     })
 
     $("#btnAddBabp").on("click", function(){
@@ -116,6 +124,46 @@ $(document).ready(function(){
                processWithAjax(data, url, null, null, method);
            }
        });
+    });
+
+    $(document).on("click", "#btnClose", function(){
+        if(!$(this).attr("disabled")){
+            var id = $(this).data("id");
+            swal({
+                title: "Caution",
+                text: "Are you sure want to close ?",
+                type: "info",
+                showCancelButton: true,
+                confirmButtonColor: "#84BCED",
+                confirmButtonText: "Yes, i'am",
+                cancelButtonText: "No, i'm not",
+                closeOnConfirm: false,
+                closeOnCancel: true
+            },
+           function (isConfirm) {
+               if (isConfirm) {
+                   popUpProgressShow();
+                    $.ajax({
+                        type: "POST",
+                        url: site_url + "MainMenu/closeChecklist",
+                        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                        dataType: 'json',
+                        processData: true,
+                        data: { ID: id },
+                        success: function (data) {
+                            swal(data.status == true ? "Great!" : "Ooppss!", data.message, data.status == true ? "success" : "error");
+                            popUpProgressHide();     
+                            tableList.ajax.reload(); 
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            popUpProgressHide();
+                            console.log("Status: " + textStatus, "Error: " + errorThrown);
+                            console.log(XMLHttpRequest);
+                        }
+                    });
+               }
+           });
+        }
     });
 });
 
@@ -196,6 +244,7 @@ function processWithAjax(getData, linkURL, currentIndex, isFinish, method) {
                 } else{
                     if(isFinish){                    
                         $("#modalMainMenu").modal("hide");
+                        swal("Great!", "Data saved successfully", "success");
                     }else{                        
                         $("#idNote_" + currentIndex).val(data.ID_NOTE);
                         $(".checkbox_idList_" + currentIndex).prop("checked", false).val("");
@@ -249,16 +298,21 @@ function getChecklistData(id){
 function onViewDataSuccess(returnResult) {
     var data = returnResult;    
     $("#modalMainMenu").modal("show");
+    globalFlag = data.FLAG;
 
-    for(var x = 0; x < data.length; x++){
-        $("#idNote_" + (x + 1)).val(data[x].ID);
-        $("#note_" + (x + 1)).val(data[x].NOTE);
+    if(data.FLAG == 1){
+        $("#modalMainMenu input[type=checkbox], #modalMainMenu textarea").prop("disabled", true);
+    }
 
-        for(var y = 0; y < data[x].checkList.length; y++){
-            $("#checkbox_check_" + data[x].checkList[y].ID_SUBLIST).val(data[x].checkList[y].ID);
-            $("#checkbox_check_" + data[x].checkList[y].ID_SUBLIST).prop("checked", true);
+    for(var x = 0; x < data.list.length; x++){
+        $("#idNote_" + (x + 1)).val(data.list[x].ID);
+        $("#note_" + (x + 1)).val(data.list[x].NOTE);
+
+        for(var y = 0; y < data.list[x].checkList.length; y++){
+            $("#checkbox_check_" + data.list[x].checkList[y].ID_SUBLIST).val(data.list[x].checkList[y].ID);
+            $("#checkbox_check_" + data.list[x].checkList[y].ID_SUBLIST).prop("checked", true);
         }
-        if(data[x].checkList.length != 0 && x != 0){            
+        if(data.list[x].checkList.length != 0 && x != 0){            
             $("#wizard .wizard_steps a[rel="+ (x + 1) +"]").removeClass().addClass("done").attr("isdone", 1);
         }
     }

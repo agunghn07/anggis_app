@@ -33,7 +33,7 @@ class MainMenu extends MY_Controller {
 			$countCheckedList = $this->MModel->getCheckedList($i->NO_BABP);
 			$persentage = round($countCheckedList * 100 / $countAllSubist, 0);
 			$regn = $countAllSubist - $countCheckedList;
-			$status = $countCheckedList == $countAllSubist ? "Done" : "On Progress";
+			$status = $i->STATUS == 1 ? "Done" : "On Progress";
 			$backgroundStatus = $status == "Done" ? "#24ac58" : "#778295";
 			$isDisable = $i->FLAG == 0 ? ($regn == 0 ? "" : "disabled") : "disabled";
 
@@ -155,5 +155,12 @@ class MainMenu extends MY_Controller {
 		$parse["status"]  = $result;
 		
 		echo json_encode($parse);
+	}
+
+	public function checkingForStatus(){
+		$no_babp = $this->input->post('NO_BABP');
+		$result = $this->MModel->checkingForStatusModel($no_babp);
+
+		echo $result;
 	}
 }

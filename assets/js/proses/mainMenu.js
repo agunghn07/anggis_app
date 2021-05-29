@@ -24,7 +24,7 @@ $(document).ready(function(){
             "infoFiltered": ""
         },
         "columnDefs": [{
-            "targets": [1, 2, 6, 7], 
+            "targets": [1, 2, 7], 
             "orderable": false, 
         }],
         "initComplete": function (settings, json) {
@@ -47,7 +47,8 @@ $(document).ready(function(){
         $("#wizard").smartWizard("goToStep", 1);
         $('#wizard .wizard_steps li:first a').removeClass().addClass('selected').attr("isdone", 0);
         $('#wizard .wizard_steps li:not(:first) a').attr("isdone", 0).removeClass().addClass('disabled');
-        tableList.ajax.reload(); 
+
+        checkingForStatus($(this).find("#id_babp").val());
     });
 
     $(".buttonNext, .buttonPrevious").on("click", function(){
@@ -353,4 +354,23 @@ function showErrorTextOnField(attr1, attr2, i) {
 function clearOnKeyDown(element) {
     $(element).closest(".has-error").removeClass("has-error");
     $(".text-danger." + $(element).attr("id")).text("");
+}
+
+function checkingForStatus(id_babp){
+    popUpProgressShow();
+    $.ajax({
+        type: "POST",
+        url: site_url + "MainMenu/checkingForStatus",
+        data: { NO_BABP: id_babp },
+        success: function (data) {
+            console.log(data);  
+            tableList.ajax.reload();            
+            popUpProgressHide();
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            popUpProgressHide();
+            console.log("Status: " + textStatus, "Error: " + errorThrown);
+            console.log(XMLHttpRequest);
+        }
+    });
 }

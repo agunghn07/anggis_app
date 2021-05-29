@@ -2,7 +2,7 @@
 
 class MainMenuModel extends CI_Model {
     var $table = 'tb_r_babp';
-    var $column_order = array('NO_BABP', null, null, 'TANGGAL_BABP', 'APP', 'PERUSAHAAN'); 
+    var $column_order = array('NO_BABP', null, null, 'TANGGAL_BABP', 'APP', 'PERUSAHAAN', 'STATUS'); 
     var $column_search = array('NO_BABP', 'APP', 'PERUSAHAAN');  
     var $order = array('CREATED_DT' => 'desc');
 
@@ -249,5 +249,23 @@ class MainMenuModel extends CI_Model {
 
         $this->db->trans_commit();
         return true;
+    }
+
+    public function checkingForStatusModel($no_babp){
+        $value = 0;
+
+        $countAllSubist   = $this->getcountAllSubist($no_babp);
+        $countCheckedList = $this->getCheckedList($no_babp);        
+    
+        $this->db->set("STATUS", ($countAllSubist - $countCheckedList) == 0 ? 1 : 0)->where("NO_BABP", $no_babp)->update("tb_r_babp");
+    
+        if($this->db->trans_status() === FALSE){
+            $this->db->trans_rollback();
+        }else{
+            $this->db->trans_commit();
+            $value = 1;
+        }
+
+        return $value;
     }
 }

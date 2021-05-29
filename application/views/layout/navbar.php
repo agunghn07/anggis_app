@@ -8,18 +8,20 @@
             <a href="#" class="navbar-brand" style="background-color: #17b39e !important;">Anggis</a>
         </div>
         <div class="navbar-collapse collapse" id="navbar">
-            <ul class="nav navbar-nav">
-                <?php if($this->session->userdata("Role") == "admin") { ?>
-                <li class="active">
-                    <a aria-expanded="false" role="button" href="<?php echo base_url('MasterList') ?>" style="color: #17b39e !important;"> Back
-                        to main Layout page</a>
-                </li>
-                <?php } ?>
-                <li>
-                    <a  href="<?php echo base_url('MainMenu') ?>"> Main Menu</a>
-                </li>
+            <?php if($this->uri->segment(1) != "Index") { ?>
+                <ul class="nav navbar-nav">
+                    <?php if($this->session->userdata("Role") == "admin") { ?>
+                    <li class="active">
+                        <a aria-expanded="false" role="button" href="<?php echo base_url('MasterList') ?>" style="color: #17b39e !important;"> Back
+                            to main Layout page</a>
+                    </li>
+                    <?php } ?>
+                    <li>
+                        <a  href="<?php echo base_url('MainMenu') ?>"> Main Menu</a>
+                    </li>
 
-            </ul>
+                </ul>     
+            <?php } ?>  
             <ul class="nav navbar-top-links navbar-right">
                 <li>
                     <span class="m-r-sm text-muted welcome-message">Welcome Anggis Doc App</span>

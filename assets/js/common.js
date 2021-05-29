@@ -204,7 +204,7 @@ function popUpProgressShow() {
             opacity: 0.6,
             cursor: 'wait'
         },
-        baseZ: 99990
+        baseZ: 9999
     });
 }
 

@@ -1,7 +1,7 @@
     <script src="<?php echo base_url(); ?>assets/js/jquery-3.1.1.min.js"></script>
     <link rel="shortcut icon" type="image/x-icon" href="<?php echo base_url(); ?>assets/img/favicon.ico">
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
 
     <title>Anggis Doc | <?php echo $title; ?></title>
     <link rel="apple-touch-icon" href="<?php echo base_url(); ?>assets/img/apple-icon-120.png">

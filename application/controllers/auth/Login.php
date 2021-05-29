@@ -62,7 +62,7 @@ class Login extends CI_Controller {
 		$data = ['user_id' => $this->session->userdata('Id'), 'access_token' => $this->session->userdata('backToken')];
 		$logId = $this->login->registToken($data);
 		$this->message('Halo '.$this->session->userdata("Username"). '!','Welcome to Anggis App','success');
-		redirect('MainMenu');
+		redirect('Index');
 	}
 
 	public function not_found(){

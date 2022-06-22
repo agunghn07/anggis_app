@@ -83,13 +83,27 @@ label {
                             <div class="col-md-6 col-lg-6">
                                 <?php $index = 1; foreach($data["listDetail"] as $list) { ?>
 
-                                <div class="checkbox checkbox-info">
-                                    <input id="checkbox_check_<?php echo $list->ID;?>"
-                                        class="checkbox_idList_<?php echo $row; ?>" type="checkbox"
-                                        data-sublist="<?php echo $list->ID ?>" value="">
-                                    <label for="checkbox_check_<?php echo $list->ID;?>">
-                                        <?php echo $list->DESCRIPTION; ?>
-                                    </label>
+                                <div class="checkbox-wrap" style="display: flex; justify-content: space-between;    ">
+                                    <div class="checkbox checkbox-info" style="flex: 1;">
+                                        <input id="checkbox_check_<?php echo $list->ID;?>"
+                                            class="checkbox_idList_<?php echo $row; ?>" type="checkbox"
+                                            data-sublist="<?php echo $list->ID ?>" data-index="<?php echo $index; ?>" value="">
+                                        <label for="checkbox_check_<?php echo $list->ID;?>">
+                                            <?php echo $list->DESCRIPTION; ?>
+                                        </label>
+                                    </div>                                    
+                                    <div class="fileinput fileinput-new" data-provides="fileinput" style="margin: 0;">
+                                        <span class="btn btn-primary btn-file" style="padding: 0px 5px;">
+                                            <span class="fileinput-new">
+                                                <i class="fa fa-upload"></i>
+                                            </span>
+                                            <span class="fileinput-exists"><i class="fa fa-exchange"></i></span>
+                                            <input type="file" name="nameFile" id="idFile_<?php echo $row; ?>_<?php echo $index; ?>" data-sublist="<?php echo $list->ID ?>" accept=".jpg, .png" style="padding: 0px 5px;"/>
+                                        </span>
+                                        <!-- <span class="fileinput-filename"></span> -->
+                                        <a href="#" class="btn btn-primary fileinput-exists" style="padding: 0px 5px;" data-dismiss="fileinput"
+                                            style="float: none">×</a>
+                                    </div>
                                 </div>
 
                                 <?php $index++; } ?>

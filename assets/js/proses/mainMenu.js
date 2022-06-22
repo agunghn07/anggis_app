@@ -1,12 +1,12 @@
 var tableList;
 var globalFlag;
 
-$(document).ready(function(){
+$(document).ready(function () {
     init_SmartWizard();
     popUpProgressShow();
     tableList = $('#tableCeklistDoc').DataTable({
-        "processing": true, 
-        "serverSide": true, 
+        "processing": true,
+        "serverSide": true,
         "order": [],
         "scrollX": true,
         "scrollY": 250,
@@ -24,17 +24,18 @@ $(document).ready(function(){
             "infoFiltered": ""
         },
         "columnDefs": [{
-            "targets": [1, 2, 7], 
-            "orderable": false, 
+            "targets": [1, 2, 7],
+            "orderable": false,
         }],
         "initComplete": function (settings, json) {
             popUpProgressHide();
         },
     });
 
-    $(document).on("click", "#btnCeklist", function(){
+    $(document).on("click", "#btnCeklist", function () {
+        $(".fileinput-exists").trigger("click");
         $(".stepContainer").css("min-height", "245px");
-        $("#id_babp").val($(this).data("id"));        
+        $("#id_babp").val($(this).data("id"));
         $('#wizard .wizard_steps li:not(:first) a').attr("isdone", 0).removeClass().addClass('disabled');
         $("input[type=checkbox]").prop("checked", false).prop("disabled", false).val("");
         $("#modalMainMenu textarea, .idNote").val("");
@@ -43,7 +44,7 @@ $(document).ready(function(){
         getChecklistData($(this).data("id"));
     });
 
-    $("#modalMainMenu").on("hidden.bs.modal", function () {        
+    $("#modalMainMenu").on("hidden.bs.modal", function () {
         $("#wizard").smartWizard("goToStep", 1);
         $('#wizard .wizard_steps li:first a').removeClass().addClass('selected').attr("isdone", 0);
         $('#wizard .wizard_steps li:not(:first) a').attr("isdone", 0).removeClass().addClass('disabled');
@@ -51,21 +52,21 @@ $(document).ready(function(){
         checkingForStatus($(this).find("#id_babp").val());
     });
 
-    $(".buttonNext, .buttonPrevious").on("click", function(){
-        if(globalFlag != 1){
+    $(".buttonNext, .buttonPrevious").on("click", function () {
+        if (globalFlag != 1) {
             processCheckData(false)
         }
     });
 
-    $(".buttonFinish").on("click", function(){
-        if(globalFlag != 1){
+    $(".buttonFinish").on("click", function () {
+        if (globalFlag != 1) {
             processCheckData(true)
-        }else{
+        } else {
             $("#modalMainMenu").modal("hide");
         }
     })
 
-    $("#btnAddBabp").on("click", function(){
+    $("#btnAddBabp").on("click", function () {
         $("#modalAddBabp").modal("show");
         $(".form-group").removeClass("has-error");
         $(".text-danger").text('');
@@ -81,7 +82,7 @@ $(document).ready(function(){
         autoclose: true
     });
 
-    $("#btnSubmit").on("click", function(){
+    $("#btnSubmit").on("click", function () {
         var method = null;
         var validation = validate();
         if (validation != 1) {
@@ -93,17 +94,17 @@ $(document).ready(function(){
     });
 
     $(document).on("keyup",
-        "#no_babp,"+
+        "#no_babp," +
         "#app," +
         "#company", function () {
             clearOnKeyDown(this);
-    });
+        });
 
-    $(document).on("change", "#date_babp", function(){
+    $(document).on("change", "#date_babp", function () {
         clearOnKeyDown(this);
     });
 
-    $(document).on("click", "#btnDelete", function(){
+    $(document).on("click", "#btnDelete", function () {
         var data = new Object();
         var method = "DELETE";
 
@@ -120,15 +121,15 @@ $(document).ready(function(){
             closeOnConfirm: false,
             closeOnCancel: true
         },
-       function (isConfirm) {
-           if (isConfirm) {
-               processWithAjax(data, url, null, null, method);
-           }
-       });
+            function (isConfirm) {
+                if (isConfirm) {
+                    processWithAjax(data, url, null, null, method);
+                }
+            });
     });
 
-    $(document).on("click", "#btnClose", function(){
-        if(!$(this).attr("disabled")){
+    $(document).on("click", "#btnClose", function () {
+        if (!$(this).attr("disabled")) {
             var id = $(this).data("id");
             swal({
                 title: "Caution",
@@ -141,30 +142,35 @@ $(document).ready(function(){
                 closeOnConfirm: false,
                 closeOnCancel: true
             },
-           function (isConfirm) {
-               if (isConfirm) {
-                   popUpProgressShow();
-                    $.ajax({
-                        type: "POST",
-                        url: site_url + "MainMenu/closeChecklist",
-                        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                        dataType: 'json',
-                        processData: true,
-                        data: { ID: id },
-                        success: function (data) {
-                            swal(data.status == true ? "Great!" : "Ooppss!", data.message, data.status == true ? "success" : "error");
-                            popUpProgressHide();     
-                            tableList.ajax.reload(); 
-                        },
-                        error: function (XMLHttpRequest, textStatus, errorThrown) {
-                            popUpProgressHide();
-                            console.log("Status: " + textStatus, "Error: " + errorThrown);
-                            console.log(XMLHttpRequest);
-                        }
-                    });
-               }
-           });
+                function (isConfirm) {
+                    if (isConfirm) {
+                        popUpProgressShow();
+                        $.ajax({
+                            type: "POST",
+                            url: site_url + "MainMenu/closeChecklist",
+                            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                            dataType: 'json',
+                            processData: true,
+                            data: { ID: id },
+                            success: function (data) {
+                                swal(data.status == true ? "Great!" : "Ooppss!", data.message, data.status == true ? "success" : "error");
+                                popUpProgressHide();
+                                tableList.ajax.reload();
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                popUpProgressHide();
+                                console.log("Status: " + textStatus, "Error: " + errorThrown);
+                                console.log(XMLHttpRequest);
+                            }
+                        });
+                    }
+                });
         }
+    });
+
+    $('input[name=nameFile]').on('change.bs.fileinput', function () {
+        let subList = $(this).data("sublist");
+        $("#checkbox_check_" + subList).prop("checked", true);
     });
 });
 
@@ -172,7 +178,7 @@ function init_SmartWizard() {
 
     if (typeof ($.fn.smartWizard) === 'undefined') { return; }
 
-    $('#wizard').smartWizard({enableFinishButton: true});
+    $('#wizard').smartWizard({ enableFinishButton: true });
 
     $('.buttonNext').addClass('btn btn-sm btn-success');
     $('.buttonPrevious').addClass('btn btn-sm btn-primary');
@@ -180,39 +186,53 @@ function init_SmartWizard() {
 
 };
 
-function processCheckData(isFinish){
+function processCheckData(isFinish) {
     currentIndex = $('#wizard .wizard_steps li a.selected .step_no').text();
     processWithAjax(getDataValue(currentIndex, null), site_url + "MainMenu/saveCheklist", currentIndex, isFinish, null);
 }
 
 function getDataValue(index, method) {
-    var params = new Object();
     var data = new Object();
+    
+    if (method != null) {
+        var params = new Object();
 
-    if(method != null){
         data.NO_BABP = $("#no_babp").val();
         data.TANGGAL_BABP = $("#date_babp").val();
         data.APP = $("#app").val();
         data.PERUSAHAAN = $("#company").val();
-    }else{
+
+        params.data = data;
+        return params;
+    } else {
+        let formData = new FormData();
+
         data.ID = $("#idNote_" + index).val();
         data.ID_BABP = $("#id_babp").val();
         data.ID_LIST = $("#id_list_" + index).val();
         data.NOTE = $("#note_" + index).val();
         data.checkList = [];
 
-        $('.checkbox_idList_'+ index +':checked').each(function () {
-            var eachData = new Object();
+        $('.checkbox_idList_' + index + ':checked').each(function () {
+            let eachData = new Object();
+            let uploaded = $("#idFile_" + index + "_" + $(this).data("index")).prop("files")[0];
+
             eachData.ID = $(this).val();
             eachData.ID_LIST = data.ID_LIST;
             eachData.ID_BABP = data.ID_BABP;
             eachData.ID_SUBLIST = $(this).data("sublist");
+            eachData.UPLOAD_NAME = (uploaded != undefined ? true : false);
             data.checkList.push(eachData);
+
+            formData.append("upload[]", $("#idFile_" + index + "_" + $(this).data("index")).prop("files")[0]);
         });
+
+        for(let key in data){
+            formData.append(key,  key != "checkList" ? data[key] : JSON.stringify(data[key]));
+        }
+        
+        return formData;
     }
-    
-    params.data = data;
-    return params;
 }
 
 function processWithAjax(getData, linkURL, currentIndex, isFinish, method) {
@@ -220,46 +240,46 @@ function processWithAjax(getData, linkURL, currentIndex, isFinish, method) {
     $.ajax({
         type: "POST",
         url: linkURL,
-        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        contentType: (method != null ? 'application/x-www-form-urlencoded; charset=UTF-8' : false),
         dataType: 'json',
-        processData: true,
+        processData: (method != null ? true : false),
         data: getData,
         success: function (data) {
             if (data.status == false) {
                 swal("Ooppss!", data.message, "error");
             } else {
-                if(method != null){
-                    if(method == "ADD"){
-                        if(data.isExsistBabp){
+                if (method != null) {
+                    if (method == "ADD") {
+                        if (data.isExsistBabp) {
                             $("#no_babp").closest(".form-group.no_babp").addClass("has-error");
                             $(".text-danger.no_babp").text("Nomor BABP " + getData.data.NO_BABP + " sudah ada !");
-                        }else{
+                        } else {
                             swal("Great!", data.message, "success");
-                            $("#modalAddBabp").modal("hide");                 
+                            $("#modalAddBabp").modal("hide");
                         }
                         changeTextButton(method);
-                    }else{
+                    } else {
                         swal("Great!", data.message, "success");
                     }
-                    tableList.ajax.reload(); 
-                } else{
-                    if(isFinish){                    
+                    tableList.ajax.reload();
+                } else {
+                    if (isFinish) {
                         $("#modalMainMenu").modal("hide");
                         swal("Great!", "Data saved successfully", "success");
-                    }else{                        
+                    } else {
                         $("#idNote_" + currentIndex).val(data.ID_NOTE);
                         $(".checkbox_idList_" + currentIndex).prop("checked", false).val("");
-                        if(data.checkList.length == 0){
-                            $("#wizard .wizard_steps a[rel="+ currentIndex +"]").removeClass().addClass("disabled").attr("isdone", 0);
-                        }else{
-                            for(var y = 0; y < data.checkList.length; y++){
-                                $(".checkbox_idList_"+ currentIndex +"#checkbox_check_" + data.checkList[y].ID_SUBLIST)
-                                .prop("checked", true)
-                                .val(data.checkList[y].ID);
+                        if (data.checkList.length == 0) {
+                            $("#wizard .wizard_steps a[rel=" + currentIndex + "]").removeClass().addClass("disabled").attr("isdone", 0);
+                        } else {
+                            for (var y = 0; y < data.checkList.length; y++) {
+                                $(".checkbox_idList_" + currentIndex + "#checkbox_check_" + data.checkList[y].ID_SUBLIST)
+                                    .prop("checked", true)
+                                    .val(data.checkList[y].ID);
                             }
                         }
                     }
-                } 
+                }
             }
             popUpProgressHide();
         },
@@ -277,7 +297,7 @@ function changeTextButton(method) {
     }
 }
 
-function getChecklistData(id){
+function getChecklistData(id) {
     popUpProgressShow();
     $.ajax({
         type: "POST",
@@ -285,7 +305,7 @@ function getChecklistData(id){
         dataType: "JSON",
         data: { ID: id },
         success: function (data) {
-            popUpProgressHide();            
+            popUpProgressHide();
             onViewDataSuccess(data);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -297,29 +317,29 @@ function getChecklistData(id){
 }
 
 function onViewDataSuccess(returnResult) {
-    var data = returnResult;    
+    var data = returnResult;
     $("#modalMainMenu").modal("show");
     globalFlag = data.FLAG;
 
-    if(data.FLAG == 1){
+    if (data.FLAG == 1) {
         $("#modalMainMenu input[type=checkbox], #modalMainMenu textarea").prop("disabled", true);
     }
 
-    for(var x = 0; x < data.list.length; x++){
+    for (var x = 0; x < data.list.length; x++) {
         $("#idNote_" + (x + 1)).val(data.list[x].ID);
         $("#note_" + (x + 1)).val(data.list[x].NOTE);
 
-        for(var y = 0; y < data.list[x].checkList.length; y++){
+        for (var y = 0; y < data.list[x].checkList.length; y++) {
             $("#checkbox_check_" + data.list[x].checkList[y].ID_SUBLIST).val(data.list[x].checkList[y].ID);
             $("#checkbox_check_" + data.list[x].checkList[y].ID_SUBLIST).prop("checked", true);
         }
-        if(data.list[x].checkList.length != 0 && x != 0){            
-            $("#wizard .wizard_steps a[rel="+ (x + 1) +"]").removeClass().addClass("done").attr("isdone", 1);
+        if (data.list[x].checkList.length != 0 && x != 0) {
+            $("#wizard .wizard_steps a[rel=" + (x + 1) + "]").removeClass().addClass("done").attr("isdone", 1);
         }
     }
 }
 
-function validate(){
+function validate() {
     var errorIndex = 0;
     if ($("#no_babp").val() == null || $("#no_babp").val() == "" || $("#no_babp").val() == undefined) {
         errorIndex = showErrorTextOnField("no_babp", "no_babp", null);
@@ -356,15 +376,15 @@ function clearOnKeyDown(element) {
     $(".text-danger." + $(element).attr("id")).text("");
 }
 
-function checkingForStatus(id_babp){
+function checkingForStatus(id_babp) {
     popUpProgressShow();
     $.ajax({
         type: "POST",
         url: site_url + "MainMenu/checkingForStatus",
         data: { NO_BABP: id_babp },
         success: function (data) {
-            console.log(data);  
-            tableList.ajax.reload();            
+            console.log(data);
+            tableList.ajax.reload();
             popUpProgressHide();
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {

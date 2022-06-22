@@ -94,9 +94,40 @@ class MainMenu extends MY_Controller {
 
 	public function saveCheklist(){
 		$parse  = array('status' => false, 'message' => null, "ID_NOTE" => null, "checkList" => []);
-		$result = $this->MModel->saveChecklistData($this->input->post('data'));
+
+		$data = $_POST;
+		$upload_file = (count($_FILES) == 0 ? null : $_FILES["upload"]);
+		$checkList = json_decode($data["checkList"], true);
+		$data["checkList"] = $checkList;
+		$index = $row = 0;
+
+		foreach($data["checkList"] as $item){
+			$obj_file = "";
+			if($item["UPLOAD_NAME"] == true){
+				$obj_file = $upload_file["name"][$row];
+				$row++;
+			}
+			$data["checkList"][$index]["UPLOAD_NAME"] = $obj_file;
+			$index++;
+		}
+		$result = $this->MModel->saveChecklistData($data);
 		if($result["bool"] == false){
 			$parse["message"] = "Looks like there's an error, please contact your administrator.";
+		}else{		
+			if($upload_file != null){
+				$this->load->library('upload');
+				$countFile = count($upload_file["name"]);	
+				for($i = 0; $i < $countFile; $i++){
+					$_FILES['upload']['name'] = $upload_file['name'][$i];
+					$_FILES['upload']['type'] = $upload_file['type'][$i];
+					$_FILES['upload']['tmp_name'] = $upload_file['tmp_name'][$i];
+					$_FILES['upload']['error'] = $upload_file['error'][$i];
+					$_FILES['upload']['size'] = $upload_file['size'][$i];   
+	
+					$this->upload->initialize($this->set_upload_options());
+					$this->upload->do_upload('upload'); 
+				}
+			}	
 		}
 		$parse["status"]    = $result["bool"];
 		$parse["ID_NOTE"]   = $result["ID_NOTE"]; 
@@ -163,4 +194,15 @@ class MainMenu extends MY_Controller {
 
 		echo $result;
 	}
+
+	private function set_upload_options()
+    {
+		$config = array();
+		$config['upload_path'] = 'assets/img/uploaded_file/';
+		$config['allowed_types'] = 'gif|jpg|png';
+		$config['max_size']      = '0';
+		$config['overwrite']     = TRUE;
+
+		return $config;
+    }
 }
